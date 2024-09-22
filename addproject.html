@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add UserInfo</title>
+    <style>
+        .container {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add USER DETAILS</h1>
+        <form id="userForm">
+            <label for="uname">Name:</label>
+            <input type="text" id="uname" name="uname" required>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
+             <label for="mobileno">MobileNo:</label>
+            <input type="text" id="mobileno" name="mobileno" required>
+            <label for="pass">Password:</label>
+            <input type="password" id="pass" name="pass" required>
+            <button type="submit">Add Product</button>
+        </form>
+        <a href="home.html">Back to Product List</a>
+    </div>
+
+    <script>
+        // Handle form submission
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+
+            // Collect form data
+            const uname = document.getElementById('uname').value;
+            const email = document.getElementById('email').value;
+            const mobileno = document.getElementById('mobileno').value;
+            const pass = document.getElementById('pass').value;
+
+            // Send POST request
+            fetch(`http://localhost:9090/pops/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    uname: uname,
+                    email: email,
+                    mobileno: mobileno,
+                    pass:pass
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Product added:', data);
+                alert('Product added successfully!');
+                // Optionally redirect to the product list page
+                window.location.href = 'fetch.html';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

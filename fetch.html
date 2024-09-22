@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Details</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>uid</th>
+                <th>uname</th>
+                <th>email</th>
+                <th>pass</th>
+                <th>mobileno</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data rows will be inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Function to populate the table with fetched data
+        function populateTable(data) {
+            const tableBody = document.querySelector('tbody');
+            tableBody.innerHTML = ''; // Clear existing rows
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.uname}</td>
+                    <td>${item.email}</td>
+                    <td>${item.mobileno}</td>
+                    <td>${item.pass}</td>
+                    
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Fetch data from the API
+        async function fetchData() {
+            try {
+                const response = await fetch('http://localhost:9090/pops/getp', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json(); // Parse the response as JSON
+                console.log('Success:', data);
+                populateTable(data);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Initial fetch to populate the table
+        fetchData();
+    </script>
+</body>
+</html>
